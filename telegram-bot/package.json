@@ -1,0 +1,28 @@
+{
+    "name": "jarvis-telegram-bot",
+    "version": "1.0.0",
+    "description": "JARVIS Telegram client - talks to the same JARVIS Core over WebSocket, giving you the full agent (tools, memory, ESP32 fleet) from your phone.",
+    "license": "MIT",
+    "private": true,
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "dev": "tsx watch src/index.ts",
+        "start": "node dist/index.js",
+        "typecheck": "tsc -p tsconfig.json --noEmit"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "telegraf": "^4.16.3",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.7",
+        "@types/ws": "^8.5.13",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.3"
+    },
+    "allowScripts": {
+        "esbuild@0.28.2": true
+    }
+}

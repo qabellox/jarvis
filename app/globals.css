@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --hud-bg: #030712;
+    --hud-card-bg: rgba(4, 15, 30, 0.65);
+    --hud-card-border: rgba(0, 243, 255, 0.25);
+    --hud-glow: 0 0 15px rgba(0, 243, 255, 0.2);
+    --hud-cyan: #00f3ff;
+    --hud-electric-blue: #0066ff;
+    --hud-amber: #ffb700;
+    --hud-text-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --hud-text-header: 'Orbitron', 'Rajdhani', sans-serif;
+    --glass-blur: blur(20px);
+
+    --void: #030712;
+    --abyss: #07071a;
+    --panel: #0a0a20;
+    --cyan: #00f3ff;
+    --blue: #0066ff;
+    --sky: #7ff5ff;
+    --warn: #ffb700;
+    --ink: #e0f2fe;
+    --muted: #b9c6e2;
+}
+
+html,
+body {
+    height: 100%;
+    background: var(--void);
+    color: var(--ink);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Deep-space backdrop - luminous cyber-blue aurora */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(1200px 760px at 70% -12%, rgba(0, 240, 255, 0.32), transparent 60%),
+        radial-gradient(900px 620px at 28% -8%, rgba(0, 102, 255, 0.34), transparent 55%),
+        radial-gradient(700px 520px at 50% 50%, rgba(24, 40, 90, 0.5), transparent 72%),
+        radial-gradient(1000px 800px at 6% 112%, rgba(0, 102, 255, 0.24), transparent 60%),
+        var(--void);
+}
+
+/* Grid overlay + twinkling starfield */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1.5px 1.5px at 24px 32px, rgba(150, 210, 255, 0.6), transparent 100%),
+        radial-gradient(1px 1px at 70px 88px, rgba(255, 255, 255, 0.5), transparent 100%),
+        radial-gradient(1.5px 1.5px at 118px 44px, rgba(120, 190, 255, 0.55), transparent 100%),
+        radial-gradient(1.5px 1.5px at 156px 120px, rgba(0, 102, 255, 0.45), transparent 100%),
+        radial-gradient(1px 1px at 40px 140px, rgba(255, 255, 255, 0.4), transparent 100%),
+        radial-gradient(1px 1px at 96px 12px, rgba(127, 212, 255, 0.5), transparent 100%);
+    background-size: 180px 180px, 150px 170px, 210px 160px, 190px 200px, 130px 180px, 160px 150px;
+    mask-image: radial-gradient(ellipse at center, black 25%, transparent 80%);
+    animation: twinkle 6s ease-in-out infinite alternate;
+}
+
+@layer components {
+    .glass-panel {
+        @apply relative rounded-2xl border;
+        border-color: var(--hud-card-border);
+        background: var(--hud-card-bg);
+        backdrop-filter: var(--glass-blur);
+        box-shadow: var(--hud-glow);
+    }
+
+    .glass-panel-accent-purple {
+        @apply border-neon-cyan/30;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 0 0 1px rgba(0, 240, 255, 0.1), 0 0 48px -12px rgba(0, 240, 255, 0.22), 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .glass-panel-accent-cyan {
+        @apply border-neon-cyan/20;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(0, 240, 255, 0.08), 0 0 40px -10px rgba(0, 240, 255, 0.22), 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .neon-orange-text {
+        background: linear-gradient(120deg, var(--sky), var(--cyan));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .neon-blue-text {
+        background: linear-gradient(120deg, var(--cyan), var(--blue));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .scanline {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.06), transparent);
+        background-size: 100% 220px;
+        animation: scan 8s linear infinite;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-display font-semibold tracking-[0.2em] uppercase transition-all duration-200;
+        color: #f0feff;
+        background: linear-gradient(135deg, #00f0ff, #0066ff);
+        box-shadow: 0 0 24px 2px rgba(0, 240, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        box-shadow: 0 0 40px 6px rgba(0, 240, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .btn-ghost {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/[0.08] px-4 py-2.5 font-display text-xs font-semibold uppercase tracking-[0.18em] transition-all duration-200 text-ink hover:text-white hover:border-neon-cyan/50 hover:shadow-glow-cyan;
+    }
+
+    .input-jarvis {
+        @apply w-full rounded-xl border border-white/20 px-5 py-4 text-lg text-white placeholder-ink-faint outline-none backdrop-blur transition-all;
+        background: rgba(8, 14, 28, 0.7);
+        caret-color: var(--cyan);
+    }
+
+    .input-jarvis:focus {
+        border-color: rgba(0, 240, 255, 0.55);
+        box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.35), 0 0 32px 0 rgba(0, 240, 255, 0.2);
+    }
+
+    .title-display {
+        @apply font-display font-bold tracking-[0.3em] uppercase;
+        color: #ffffff;
+        text-shadow: 0 0 14px rgba(0, 240, 255, 0.35), 0 0 34px rgba(0, 102, 255, 0.25);
+    }
+}
+
+/* Thin neon scrollbars */
+
+/* Animated aurora backdrop */
+.aurora {
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        conic-gradient(from 180deg at 50% 18%,
+            rgba(0, 240, 255, 0) 0%,
+            rgba(0, 240, 255, 0.14) 22%,
+            rgba(0, 102, 255, 0.12) 42%,
+            rgba(0, 102, 255, 0.08) 60%,
+            rgba(0, 240, 255, 0.12) 80%,
+            rgba(0, 240, 255, 0) 100%);
+    filter: blur(28px);
+    animation: aurora-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift {
+    0% {
+        transform: translate3d(-4%, -2%, 0) rotate(0deg) scale(1);
+    }
+
+    100% {
+        transform: translate3d(4%, 3%, 0) rotate(7deg) scale(1.06);
+    }
+}
+
+@keyframes twinkle {
+    from {
+        opacity: 0.65;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.7);
+        opacity: 0;
+    }
+}
+
+@keyframes caret-blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Gradient rotating ring used for busy / loading states */
+.spinner-ring {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background: conic-gradient(from 0deg, transparent 20%, #00f0ff 70%, #ffaa00 100%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Rotating holographic rings for the central orb */
+.orb-ring {
+    animation: orb-spin 16s linear infinite;
+}
+
+.orb-ring-rev {
+    animation: orb-spin 30s linear infinite reverse;
+}
+
+@keyframes orb-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Neon pulse glow for active elements */
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+    }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+/* Shimmering skeleton loader */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(0, 240, 255, 0.06);
+    border-radius: 6px;
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.25), transparent);
+    animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Faster rotating rings while the orb is listening / clicked */
+.orb-ring-fast {
+    animation-duration: 5s !important;
+}
+
+.orb-ring-rev-fast {
+    animation-duration: 9s !important;
+}
+
+/* Terminal caret for the live log */
+.term-caret::after {
+    content: '▊';
+    margin-left: 2px;
+    color: rgba(0, 240, 255, 0.9);
+    animation: caret-blink 1s steps(1) infinite;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.4);
+}

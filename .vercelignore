@@ -1,0 +1,18 @@
+# Heavy / generated paths that must not be uploaded to Vercel.
+# The renderer is a static export built remotely via `npm run build:renderer`.
+node_modules/
+**/node_modules/
+.next/
+dist/
+release/
+out/
+data/
+developer-journal/
+docs/
+.env
+.env.*
+*.log
+.vercel/
+.git/
+jarvis-core/
+telegram-bot/

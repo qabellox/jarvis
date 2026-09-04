@@ -1,0 +1,118 @@
+{
+    "name": "project-jarvis",
+    "version": "1.0.0",
+    "description": "JARVIS (Just A Rather Very Intelligent System) - Edge AI Orchestrator. A cinematic desktop command center for autonomous AI agents controlling a fleet of ESP32 edge devices via federated learning.",
+    "author": "Port Said Research",
+    "license": "MIT",
+    "private": true,
+    "main": "dist/electron/main/index.js",
+    "scripts": {
+        "dev": "concurrently -k -n NEXT,ELEC -c cyan,magenta \"npm:dev:next\" \"npm:dev:electron\"",
+        "dev:next": "next dev -p 3000",
+        "dev:electron": "wait-on tcp:127.0.0.1:3000 && npm run build:electron && electron . --dev",
+        "build": "npm run build:renderer && npm run build:electron",
+        "build:renderer": "next build",
+        "build:electron": "tsc -p tsconfig.electron.json",
+        "build:electron:watch": "tsc -p tsconfig.electron.json --watch",
+        "start": "npm run build && electron .",
+        "app": "electron .",
+        "dist": "npm run build && electron-builder",
+        "dist:win": "npm run build && electron-builder --win",
+        "typecheck": "tsc --noEmit && tsc -p tsconfig.electron.json --noEmit",
+        "core:dev": "npm --prefix jarvis-core run dev",
+        "core:build": "npm --prefix jarvis-core run build",
+        "core:start": "npm --prefix jarvis-core run start",
+        "core:typecheck": "npm --prefix jarvis-core run typecheck",
+        "bot:dev": "npm --prefix telegram-bot run dev",
+        "bot:build": "npm --prefix telegram-bot run build",
+        "bot:start": "npm --prefix telegram-bot run start",
+        "bot:typecheck": "npm --prefix telegram-bot run typecheck",
+        "build:all": "npm run build && npm run core:build && npm run bot:build",
+        "typecheck:all": "npm run typecheck && npm run core:typecheck && npm run bot:typecheck",
+        "dev:all": "concurrently -k -n CORE,APP,BOT -c blue,cyan,magenta \"npm:core:dev\" \"npm:dev\" \"npm:bot:dev\""
+    },
+    "dependencies": {
+        "clsx": "^2.1.1",
+        "dotenv": "^16.4.7",
+        "framer-motion": "^11.18.0",
+        "msedge-tts": "^1.2.1",
+        "next": "^15.1.6",
+        "ogl": "^1.0.11",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "three": "^0.172.0",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.7",
+        "@types/react": "^18.3.18",
+        "@types/react-dom": "^18.3.5",
+        "@types/three": "^0.172.0",
+        "@types/ws": "^8.5.13",
+        "autoprefixer": "^10.4.20",
+        "concurrently": "^9.1.2",
+        "electron": "^33.3.1",
+        "electron-builder": "^25.1.8",
+        "postcss": "^8.5.1",
+        "tailwindcss": "^3.4.17",
+        "typescript": "^5.7.3",
+        "wait-on": "^8.0.2"
+    },
+    "build": {
+        "appId": "com.portsaidresearch.jarvis",
+        "productName": "JARVIS",
+        "asar": true,
+        "files": [
+            "dist/**/*",
+            "package.json"
+        ],
+        "extraResources": [
+            {
+                "from": "jarvis-core",
+                "to": "jarvis-core",
+                "filter": [
+                    "dist/**/*",
+                    "scripts/**/*",
+                    "package.json",
+                    ".env",
+                    "node_modules/ws/**",
+                    "node_modules/sql.js/**",
+                    "node_modules/dotenv/**",
+                    "node_modules/node-cron/**",
+                    "node_modules/uuid/**"
+                ]
+            }
+        ],
+        "directories": {
+            "output": "release",
+            "buildResources": "build"
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "icon": "build/icon.ico",
+            "signAndEditExecutable": false,
+            "artifactName": "JARVIS-Setup-${version}.${ext}"
+        },
+        "nsis": {
+            "oneClick": true,
+            "perMachine": false,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "JARVIS"
+        },
+        "mac": {
+            "target": "dmg",
+            "category": "public.app-category.developer-tools"
+        },
+        "linux": {
+            "target": "AppImage",
+            "category": "Utility"
+        }
+    },
+    "allowScripts": {
+        "electron@33.4.11": true,
+        "sharp@0.34.5": true
+    }
+}

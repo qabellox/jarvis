@@ -155,6 +155,19 @@ GET http://127.0.0.1:8080/research/export
 
 ## Global access (web UI + local hardware control)
 
+### Always-on local agent
+
+The web UI can only control the local machine while a JARVIS Core is running. To keep the Core available after logout, while Windows is locked, and after a reboot, run PowerShell as Administrator once:
+
+```powershell
+npm --prefix jarvis-core run build
+powershell -ExecutionPolicy Bypass -File .\scripts\install-global-agent.ps1
+```
+
+This installs a Windows Scheduled Task that starts the Core at boot independently of Electron. It also starts `cloudflared` when it is installed. Use `scripts\remove-global-agent.ps1` to remove the task.
+
+Sleep and power-off are hardware states. A sleeping machine must either stay awake or support Wake-on-LAN; a powered-off machine cannot execute commands until it boots. For a permanent public address, use a named Cloudflare Tunnel or VPN rather than a quick tunnel, whose URL changes and has no uptime guarantee.
+
 The same cinematic UI you get in the desktop app runs as a static web app. It talks
 straight to your local Core over WebSocket, so you get the perks of both: reach JARVIS
 from anywhere in the world **and** keep full control of your PC — files, folders and

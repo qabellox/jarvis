@@ -12,6 +12,9 @@ out/
 .env.local
 .env.production
 
+# local deployment metadata
+.vercel/
+
 # runtime data (research database, logs)
 data/
 

@@ -1,0 +1,31 @@
+{
+    "name": "JARVIS",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+    "postCreateCommand": "npm ci && npm --prefix jarvis-core ci && npm --prefix telegram-bot ci",
+    "forwardPorts": [
+        3000,
+        8080,
+        8767
+    ],
+    "portsAttributes": {
+        "3000": {
+            "label": "JARVIS web UI",
+            "onAutoForward": "openBrowser"
+        },
+        "8080": {
+            "label": "JARVIS Core HTTP"
+        },
+        "8767": {
+            "label": "JARVIS Core WebSocket"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "github.copilot",
+                "github.copilot-chat",
+                "dbaeumer.vscode-eslint"
+            ]
+        }
+    }
+}
